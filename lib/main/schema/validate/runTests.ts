@@ -1,4 +1,4 @@
-import { ValidationError } from '../error';
+import { ValidationError } from './error';
 import { TestOptions } from './createValidation';
 import { Callback } from './types';
 

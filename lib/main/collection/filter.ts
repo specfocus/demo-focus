@@ -1,4 +1,4 @@
-import { Shape, Value } from './shape';
+import { Shape, Value } from '../schema/any';
 
 export type Range<V extends number | string> = Partial<{
   [K in 'lt' | 'lte']: V;

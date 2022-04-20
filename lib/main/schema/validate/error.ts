@@ -1,5 +1,5 @@
-import printValue from './validation/printValue';
-import toArray from './validation/toArray';
+import printValue from './printValue';
+import toArray from './toArray';
 
 const STR_REG = /\$\{\s*(\w+)\s*\}/g;
 

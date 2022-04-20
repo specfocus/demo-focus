@@ -1,5 +1,5 @@
-import isSchema from './validation/isSchema';
-import type { Callback, ValidateOptions } from './validation/types';
+import isSchema from './validate/isSchema';
+import type { Callback, ValidateOptions } from './validate/types';
 import type { ResolveOptions } from './condition';
 import type {
   AnySchema,

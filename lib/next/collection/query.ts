@@ -130,10 +130,11 @@ export const useCollectionLocalQuery = ({ collectionName, queryName }: UseCollec
           for (let i = nextIndex; i < keys.length; i++) {
             const documentKey = keys[nextIndex];
             const document = records[Number(documentKey)];
-            if (document && query.test(document))
+            if (document && query.test(document)) {
               nextIndex = i + 1;
-            Object.assign(result, { value: document, done: false });
-            break;
+              Object.assign(result, { value: document, done: false });
+              break;
+            }
           }
           return result;
         }

@@ -11,9 +11,14 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
+    "@specfocus/main-focus": "^0.0.3",
+    "@specfocus/next-focus": "^0.1.0",
+    "mingo": "^6.0.5",
+    "mongodb": "^4.5.0",
     "next": "12.1.5",
     "react": "18.0.0",
-    "react-dom": "18.0.0"
+    "react-dom": "18.0.0",
+    "recoil": "^0.7.2"
   },
   "devDependencies": {
     "@types/node": "17.0.24",

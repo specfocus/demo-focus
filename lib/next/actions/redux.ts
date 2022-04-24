@@ -1,4 +1,4 @@
-import Tokenizer, { EntryToken, ItemToken, ValueToken } from '@specfocus/json-focus/src/stream/input/tokenizer';
+import Tokenizer, { EntryToken, ItemToken, ValueToken } from '@specfocus/json-focus/stream/input/tokenizer';
 import { Broker } from '@specfocus/main-focus/src/specs/broker';
 import isAction from './isAction';
 import ResponseBroker from './response';

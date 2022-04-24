@@ -1,4 +1,4 @@
-import { ErrorToken } from '@specfocus/json-focus/src/stream/input/tokenizer';
+import { ErrorToken } from '@specfocus/json-focus/stream/input/tokenizer';
 import { PatchAction, SomeAction, ThrowAction } from '@specfocus/main-focus/src/specs/action';
 
 export default class ResponseBroker {

@@ -1,4 +1,4 @@
-import Tokenizer, { Token } from '@specfocus/json-focus/src/stream/input/tokenizer';
+import Tokenizer, { Token } from '@specfocus/json-focus/stream/input/tokenizer';
 import type { NextRequest } from 'next/server';
 import iterable from '../stream/asyc-generator';
 

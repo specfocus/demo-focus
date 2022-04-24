@@ -1,6 +1,6 @@
 /// <reference lib="dom" />
 import { Dispatch } from 'react';
-import Tokenizer from '@specfocus/json-focus/src/stream/input/tokenizer';
+import Tokenizer from '@specfocus/json-focus/stream/input/tokenizer';
 import { SomeAction } from '@specfocus/main-focus/src/specs/action';
 import isAction from './isAction';
 

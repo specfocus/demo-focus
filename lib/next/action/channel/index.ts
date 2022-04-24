@@ -2,23 +2,61 @@
 import { Dispatch } from 'react';
 import Tokenizer from '@specfocus/json-focus/stream/input/tokenizer';
 import { SomeAction } from '@specfocus/main-focus/src/specs/action';
-import isAction from './isAction';
+import isAction from '../isAction';
+import { Source } from './source';
 
-export default class Fetcher {
+/** UI */
+export class Channel {
+  private source: Source = new Source();
+
   constructor(
-    private dispatch: Dispatch<SomeAction>
+    public url: string,
+    public dispatch: Dispatch<SomeAction>,
+    public method: 'POST' = 'POST'
   ) {
-    this.fetch = this.fetch.bind(this);
+    this.source = new Source();
+    this.connect = this.connect.bind(this);
+    this.enqueue = this.enqueue.bind(this);
+    this.send = this.send.bind(this);
+    this._handler = this._handler.bind(this);
   }
 
-  public fetch(
-    input: RequestInfo,
-    init?: RequestInit
-  ): Promise<void> {
-    return fetch(input, init).then(this.handler);
+  public get connected() {
+    return this.source.connected;
   }
 
-  private async handler(
+  public get queue() {
+    return this.source.queue;
+  }
+
+  public connect(): AbortController {
+    const method = this.method;
+    const controller = new AbortController();
+    const signal = controller.signal;
+    const body = new ReadableStream(this.source);
+    fetch(this.url, { body, method, signal })
+      .then(this._handler)
+      .catch(e => {
+        console.log(e.message);
+      })
+      .finally(() => {
+        console.log('disconnected');
+      });
+    return controller;
+  }
+
+  public enqueue(action: SomeAction) {
+    this.queue.push(action);
+  }
+
+  public send(action: SomeAction) {
+    this.enqueue(action);
+    if (!this.connected) {
+      this.connect();
+    }
+  }
+
+  private async _handler(
     res: Response
   ): Promise<void> {
     if (!res.ok || !res.body || res.bodyUsed) {

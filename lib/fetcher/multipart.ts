@@ -44,7 +44,7 @@ export async function* generate<T>(
 				let tmp;
 				while (tmp = arr_headers.shift()) {
 					tmp = tmp.split(': ');
-					headers[tmp.shift().toLowerCase()] = tmp.join(': ');
+					headers[tmp.shift()!.toLowerCase()] = tmp.join(': ');
 				}
 
 				let body: T | Buffer = current.slice(idx_headers + separator.length, current.lastIndexOf('\r\n'));

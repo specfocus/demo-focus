@@ -9,6 +9,7 @@ async function* patch(): AsyncIterable<AlertAction | PatchAction> {
 
 }
 
+/** API */
 export default class MongoBroker implements Broker {
   constructor() {
   }

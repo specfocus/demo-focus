@@ -1,4 +1,4 @@
-import { Shape, Value } from '../schema/any';
+import { Shape, Value } from '@specfocus/json-focus/any';
 
 export type Range<V extends number | string> = Partial<{
   [K in 'lt' | 'lte']: V;

@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import RequestBroker from './mongodb';
 import Redux from './redux';
-import ResponseBroker from './response';
 
+/** API */
 export default function middleware(req: NextRequest) {
   if (req.body === null) {
     return NextResponse.next();

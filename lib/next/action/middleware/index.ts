@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import RequestBroker from './mongodb';
-import Redux from './redux';
+import RequestBroker from '../../mongo/broker';
+import Writer from './ouput';
 
 /** API */
 export default function middleware(req: NextRequest) {
@@ -9,7 +9,7 @@ export default function middleware(req: NextRequest) {
   }
   const reader = req.body.getReader();
   const broker = new RequestBroker(/* holder */);
-  const redux = new Redux(reader, broker);
+  const redux = new Writer(reader, broker);
   const stream = new ReadableStream(redux);
   return new Response(
     stream,

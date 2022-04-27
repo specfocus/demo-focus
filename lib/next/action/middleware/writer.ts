@@ -1,6 +1,7 @@
 import { ErrorToken } from '@specfocus/json-focus/stream/input/tokenizer';
 import { PatchAction, SomeAction, ThrowAction } from '@specfocus/main-focus/src/specs/action';
 
+// not used deprecated
 export default class ResponseBroker {
   lineCount = 0;
   constructor(

@@ -8,5 +8,5 @@ export const atomAlert = atom<Record<number, AlertWhat>>({
 });
 
 export const useAlert = () => {
-
+  return null;
 };

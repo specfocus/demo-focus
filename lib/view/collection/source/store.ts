@@ -1,6 +1,6 @@
 import { Collection, CollectionStore, Document } from '@lib/main/collection/store';
 import { isNil } from '@specfocus/main-focus/src/maybe';
-import { atom, DefaultValue, selectorFamily } from 'recoil';
+import { atom, DefaultValue, selectorFamily, useRecoilState, useResetRecoilState, useSetRecoilState } from 'recoil';
 
 export const atomStore = atom<CollectionStore>({
   key: 'store',
@@ -22,8 +22,8 @@ export const selectorCollection = selectorFamily<Collection, string>({
   set: (collectionName: string) => ({ get, set }, value) => {
     const collections = get(atomStore);
     const { [collectionName]: val, ...next } = collections;
-    if (value instanceof DefaultValue || isNil(value)) {
-    } else {
+    const remove = value instanceof DefaultValue || isNil(value);
+    if (!remove) {
       Object.assign(next, { [collectionName]: value });
     }
     set(
@@ -65,5 +65,11 @@ export const selectorDocument = selectorFamily<Document | null, [string, number]
 });
 
 export const useStore = () => {
-
+  const reset = useResetRecoilState(atomStore);
+  const [value, set] = useRecoilState(atomStore);
+  return {
+    reset,
+    set,
+    value
+  }
 };

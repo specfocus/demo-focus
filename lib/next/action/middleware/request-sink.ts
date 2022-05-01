@@ -26,7 +26,7 @@ class RequestSink implements UnderlyingSink<Uint8Array> {
       if (!isAction(token.value)) {
         continue;
       }
-      this.broker.push(token.value);
+      this.broker.enqueue(token.value);
     }
   };
 }

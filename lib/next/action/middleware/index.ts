@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import Database from '../../mongo/consumer';
 import Broker from './request-broker';
 import Sink from './request-sink';
 import Source from './response-source';
@@ -10,14 +11,16 @@ export default function middleware(req: NextRequest) {
   }
   const broker = new Broker();
   // register consumers
-  // const consumer = new Consumer();
-  // broker.add(consumer);
-  const sink = new Sink(broker);
-  const source = new Source(broker);
-  req.body.pipeTo(new WritableStream(sink));
-  const stream = new ReadableStream(source);
+  broker.append(new Database());
+
+  req.body.pipeTo(
+    new WritableStream(new Sink(broker))
+  );
+
   return new Response(
-    stream,
+    new ReadableStream(
+      new Source(broker)
+    ),
     {
       status: 200,
       headers: {

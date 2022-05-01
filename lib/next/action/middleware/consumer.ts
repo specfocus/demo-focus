@@ -7,8 +7,7 @@ export interface ActionQueue {
 /**                                                action consumer
  *  | request -> middleware -> broker (split) -> [ queue | iterator ] -> output => middleware -> response |
 */
-export interface Consumer {
-  accepts: Set<SomeAction['type']>;
-  input: ActionQueue;
-  output: AsyncIterator<SomeAction>;
+export interface Consumer extends AsyncIterable<SomeAction>, AsyncIterator<SomeAction> {
+  accepts: (type: SomeAction['type']) => boolean;
+  enqueue: (...actions: SomeAction[]) => void | PromiseLike<void>;
 };

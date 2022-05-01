@@ -19,7 +19,7 @@ class RequestBroker implements Broker, AsyncIterable<SomeAction>, AsyncIterator<
 
   public readonly [Symbol.asyncIterator] = (): AsyncIterator<SomeAction> => this;
 
-  public readonly add = (consumer: Consumer): void => {
+  public readonly append = (consumer: Consumer): void => {
     throw new Error('Method not implemented.');
   };
 
@@ -27,12 +27,12 @@ class RequestBroker implements Broker, AsyncIterable<SomeAction>, AsyncIterator<
     throw new Error('Method not implemented.');
   }
 
-  /** AsyncIterator<SomeAction> */
-  public readonly next = (...args: [] | [undefined]): Promise<IteratorResult<SomeAction, SomeAction>> => {
+  public readonly enqueue = (...actions: SomeAction[]): void => {
     throw new Error('Method not implemented.');
   };
 
-  public readonly push = (...actions: SomeAction[]): void => {
+  /** AsyncIterator<SomeAction> */
+  public readonly next = (...args: [] | [undefined]): Promise<IteratorResult<SomeAction, SomeAction>> => {
     throw new Error('Method not implemented.');
   };
 

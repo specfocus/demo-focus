@@ -1,5 +1,6 @@
 import { AlertAction, AsyncAction, PatchAction, QueryAction, QuickAction, SomeAction } from '@specfocus/main-focus/src/specs/action';
-import merge, { Broker } from './broker';
+import merge from '../../../main/async/merge';
+import { Broker } from './broker';
 import { Consumer } from './consumer';
 
 async function* alert(): AsyncIterable<AlertAction> {
@@ -14,9 +15,9 @@ async function* patch(): AsyncIterable<AlertAction | PatchAction> {
  * 
  */
 class RequestBroker implements Broker, AsyncIterable<SomeAction>, AsyncIterator<SomeAction> {
-  private _generator!: AsyncGenerator<SomeAction>;
+  private readonly _generator: AsyncGenerator<SomeAction>;
   constructor(...consumers: Consumer[]) {
-    this._generator = merge<AsyncAction>(consumers);
+    this._generator = merge<SomeAction>(...consumers);
   }
 
   public readonly [Symbol.asyncIterator] = (): AsyncIterator<SomeAction> => this;

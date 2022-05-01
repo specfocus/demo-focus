@@ -9,10 +9,11 @@ export default function middleware(req: NextRequest) {
   if (req.body === null) {
     return NextResponse.next();
   }
-  const broker = new Broker();
-  // register consumers
-  broker.append(new Database());
-
+  const broker = new Broker(
+    // register consumers
+    new Database()
+  );
+  
   req.body.pipeTo(
     new WritableStream(new Sink(broker))
   );

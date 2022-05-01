@@ -1,5 +1,5 @@
 import { AlertAction, AsyncAction, PatchAction, QueryAction, QuickAction, SomeAction } from '@specfocus/main-focus/src/specs/action';
-import { Broker } from './broker';
+import merge, { Broker } from './broker';
 import { Consumer } from './consumer';
 
 async function* alert(): AsyncIterable<AlertAction> {
@@ -14,14 +14,12 @@ async function* patch(): AsyncIterable<AlertAction | PatchAction> {
  * 
  */
 class RequestBroker implements Broker, AsyncIterable<SomeAction>, AsyncIterator<SomeAction> {
-  constructor() {
+  private _generator!: AsyncGenerator<SomeAction>;
+  constructor(...consumers: Consumer[]) {
+    this._generator = merge<AsyncAction>(consumers);
   }
 
   public readonly [Symbol.asyncIterator] = (): AsyncIterator<SomeAction> => this;
-
-  public readonly append = (consumer: Consumer): void => {
-    throw new Error('Method not implemented.');
-  };
 
   public readonly cancel = async (reason?: any): Promise<void> => {
     throw new Error('Method not implemented.');

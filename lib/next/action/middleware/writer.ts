@@ -1,4 +1,5 @@
-import { ErrorToken } from '@specfocus/json-focus/stream/input/tokenizer';
+import { Fallacy } from '@specfocus/json-focus/async/tokenizer';
+import { ARRAY_TYPE, OBJECT_TYPE } from '@specfocus/json-focus/schema';
 import { PatchAction, SomeAction, ThrowAction } from '@specfocus/main-focus/src/specs/action';
 
 // not used deprecated
@@ -6,7 +7,7 @@ export default class ResponseBroker {
   lineCount = 0;
   constructor(
     public controller: ReadableStreamController<Uint8Array>,
-    public type: 'array' | 'shape' | 'value' = 'value'
+    public type: 'array' | 'object' | 'value' = 'value'
   ) {
   }
 
@@ -21,7 +22,7 @@ export default class ResponseBroker {
     }
     // TODO: handle error, create an alert
     switch (this.type) {
-      case 'array':
+      case ARRAY_TYPE:
         if (this.lineCount > 0) {
           this.controller.enqueue(Buffer.from(',\n'));
         } else {
@@ -29,7 +30,7 @@ export default class ResponseBroker {
         }
         this.controller.enqueue(Buffer.from(JSON.stringify(action)));
         break;
-      case 'shape':
+      case OBJECT_TYPE:
         if (this.lineCount > 0) {
           this.controller.enqueue(Buffer.from(`,\n\t"${Date.now()}": `));
         } else {
@@ -43,7 +44,7 @@ export default class ResponseBroker {
   }
 
   /** spawn process, execute function/business rule */
-  error(token: ErrorToken) {
+  error(token: Fallacy) {
     if (this.type === 'value') {
       this.controller.enqueue(Buffer.from(token.message));
     } else {

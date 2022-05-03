@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import Database from '../../mongo/consumer';
 import Broker from './request-broker';
 import Sink from './request-sink';
-import Source from './response-source';
+import Source from './response-producer';
 
 /** API */
 export default function middleware(req: NextRequest) {

@@ -1,18 +1,18 @@
 import { NO_ROOT_ARRAY, Tokenizer } from '@specfocus/json-focus/async/tokenizer';
 import isAction from '../isAction';
-import { Broker } from './broker';
+import { Actor } from './actor';
 /**
- * Used in 
+ * Used in middleware
  */
 class RequestSink implements UnderlyingSink<Uint8Array> {
   private readonly tokenizer: Tokenizer;
   type?: undefined;
 
-  constructor(public readonly broker: Broker) {
+  constructor(public readonly consumer: Actor) {
     this.tokenizer = new Tokenizer(new Set([NO_ROOT_ARRAY]));
   }
 
-  abort = (reason?: any): void | PromiseLike<void> => { };
+  abort = (reason?: any): void | PromiseLike<void> => this.consumer.abort(reason);
 
   // close = (): void | PromiseLike<void> => { };
   // start = (controller: WritableStreamDefaultController): any => { };
@@ -26,7 +26,7 @@ class RequestSink implements UnderlyingSink<Uint8Array> {
       if (!isAction(token.value)) {
         continue;
       }
-      this.broker.enqueue(token.value);
+      this.consumer.consume(token.value);
     }
   };
 }

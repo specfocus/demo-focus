@@ -1,5 +1,5 @@
 import { SomeAction } from '@specfocus/main-focus/src/specs/action';
-import { ActionQueue, Consumer } from '../action/middleware/consumer';
+import { Actor } from '../action/middleware/actor';
 
 /**                                                action consumer
  *  | request -> middleware -> broker (split) -> [ queue | iterator ] -> output => middleware -> response |
@@ -8,7 +8,7 @@ const consumer = () => {
 
 };
 
-class MongoConsumer implements Consumer, AsyncIterable<SomeAction>, AsyncIterator<SomeAction> {
+class MongoConsumer implements Actor, AsyncIterable<SomeAction>, AsyncIterator<SomeAction> {
   private readonly _types = new Set<SomeAction['type']>(
     ['alert', 'patch', 'query']
   );
@@ -17,7 +17,11 @@ class MongoConsumer implements Consumer, AsyncIterable<SomeAction>, AsyncIterato
 
   public readonly accepts = (type: SomeAction['type']): boolean => this._types.has(type);
 
-  public readonly enqueue = async (...actions: SomeAction[]): Promise<void> => {
+  public readonly abort = (reason?: any): void | PromiseLike<void> => {
+    throw new Error('Method not implemented.');
+  }
+
+  public readonly consume = async (...actions: SomeAction[]): Promise<void> => {
     throw new Error('Method not implemented.');
   }
 

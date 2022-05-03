@@ -9,10 +9,13 @@ export default function middleware(req: NextRequest) {
   if (req.body === null) {
     return NextResponse.next();
   }
+  const controller = new AbortController();
   const multiplexer = new Multiplexer(
     // register consumers
-    Database.create()
+    Database.create(controller)
   );
+
+  req.signal.onabort = () => controller.abort(req.signal.reason);
 
   req.body.pipeTo(
     new WritableStream(new Sink(multiplexer))

@@ -4,6 +4,9 @@ interface Producer<T = any> {
   result?: T | null;
 }
 
+/**
+ * 
+ */
 class Multiplexer<T> {
   constructor(
     protected readonly sources: AsyncIterable<T>[]

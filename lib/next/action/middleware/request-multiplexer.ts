@@ -2,8 +2,9 @@ import { SomeAction } from '@specfocus/main-focus/src/specs/action';
 import Multiplexer from '../../../main/async/multiplexer';
 import { Actor } from './actor';
 
-/** 
- * shares actions with consumers and merge reactions
+/**
+ * Shares actions with consumers and merge reactions
+ * | request-sink -> midleware-mutiplexer -> request-source |
  */
 class RequestBroker extends Multiplexer<SomeAction> implements Actor{
   private readonly _consumers: Actor[];

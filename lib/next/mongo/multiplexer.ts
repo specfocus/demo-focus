@@ -5,12 +5,12 @@ import MongoContext from './context';
 import * as generators from './reactions';
 import idle from './idle';
 
-/**                                                action consumer
- *  | request -> middleware -> broker (split) -> [ queue | iterator ] -> output => middleware -> response |
-*/
+/** Mongo actor receiving actions from request-multiplexer in the middleware
+ *  | request-sink -> midleware-mutiplexer -> mongo-multiplexer -> request-source |
+ */
 class MongoMultiplexer extends Multiplexer<SomeAction> implements Actor {
   static create(controller: AbortController) {
-    const context = new MongoContext();
+    const context = MongoContext.create();
     const reactors = Object.entries(generators)
       .reduce(
         (acc, [key, fn]) => Object.assign(
@@ -37,27 +37,15 @@ class MongoMultiplexer extends Multiplexer<SomeAction> implements Actor {
 
   public readonly consume = async (...actions: SomeAction[]): Promise<void> => {
     for (const action of actions) {
+      if (this.controller.signal.aborted) {
+        break;
+      }
       const { type, ...params } = action;
       const { [type]: fn } = this.reactors;
       // @ts-ignore
       const asyncIterable = fn(params, this.controller);
       this.sources.push(asyncIterable);
     }
-  };
-
-  /** AsyncIterator<SomeAction> */
-  public readonly next = (...args: [] | [undefined]): Promise<IteratorResult<SomeAction, SomeAction>> => {
-    throw new Error('Method not implemented.');
-  };
-
-  /** AsyncIterator<SomeAction> */
-  public readonly return = (value?: SomeAction | PromiseLike<SomeAction>): Promise<IteratorResult<SomeAction, SomeAction>> => {
-    throw new Error('Method not implemented.');
-  };
-
-  /** AsyncIterator<SomeAction> */
-  public readonly throw = (e?: any): Promise<IteratorResult<SomeAction, SomeAction>> => {
-    throw new Error('Method not implemented.');
   };
 }
 

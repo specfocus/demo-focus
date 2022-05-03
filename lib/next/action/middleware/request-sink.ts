@@ -8,11 +8,11 @@ class RequestSink implements UnderlyingSink<Uint8Array> {
   private readonly tokenizer: Tokenizer;
   type?: undefined;
 
-  constructor(public readonly consumer: Actor) {
+  constructor(public readonly actor: Actor) {
     this.tokenizer = new Tokenizer(new Set([NO_ROOT_ARRAY]));
   }
 
-  abort = (reason?: any): void | PromiseLike<void> => this.consumer.abort(reason);
+  abort = (reason?: any): void | PromiseLike<void> => this.actor.abort(reason);
 
   // close = (): void | PromiseLike<void> => { };
   // start = (controller: WritableStreamDefaultController): any => { };
@@ -26,7 +26,7 @@ class RequestSink implements UnderlyingSink<Uint8Array> {
       if (!isAction(token.value)) {
         continue;
       }
-      this.consumer.consume(token.value);
+      this.actor.consume(token.value);
     }
   };
 }

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import Database from '../../mongo/consumer';
+import Database from '../../mongo/actor';
 import Broker from './request-broker';
 import Sink from './request-sink';
 import Source from './response-producer';
@@ -13,7 +13,7 @@ export default function middleware(req: NextRequest) {
     // register consumers
     new Database()
   );
-  
+
   req.body.pipeTo(
     new WritableStream(new Sink(broker))
   );

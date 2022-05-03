@@ -1,29 +1,41 @@
 import { SomeAction } from '@specfocus/main-focus/src/specs/action';
 import { Actor } from '../action/middleware/actor';
+import MongoContext from './context';
+import * as generators from './reactions';
 
 /**                                                action consumer
  *  | request -> middleware -> broker (split) -> [ queue | iterator ] -> output => middleware -> response |
 */
-const consumer = () => {
-
-};
-
-class MongoConsumer implements Actor, AsyncIterable<SomeAction>, AsyncIterator<SomeAction> {
-  private readonly _types = new Set<SomeAction['type']>(
-    ['alert', 'patch', 'query']
-  );
+class MongoConsumer implements Actor {
+  private readonly reactors: typeof generators;
 
   public readonly [Symbol.asyncIterator] = (): AsyncIterator<SomeAction> => this;
 
-  public readonly accepts = (type: SomeAction['type']): boolean => this._types.has(type);
+  constructor() {
+    const context = new MongoContext();
+    this.reactors = Object.entries(generators)
+      .reduce(
+        (acc, [key, fn]) => Object.assign(
+          acc,
+          { [key]: fn.bind(context) }
+        ),
+        { ...generators }
+      );
+  }
 
   public readonly abort = (reason?: any): void | PromiseLike<void> => {
     throw new Error('Method not implemented.');
-  }
+  };
 
   public readonly consume = async (...actions: SomeAction[]): Promise<void> => {
-    throw new Error('Method not implemented.');
-  }
+    for (const action of actions) {
+      const { type, ...params } = action;
+      const { [type]: fn } = this.reactors;
+      // @ts-ignore
+      const asyncIterable = fn(params);
+      // merge that ^
+    }
+  };
 
   /** AsyncIterator<SomeAction> */
   public readonly next = (...args: [] | [undefined]): Promise<IteratorResult<SomeAction, SomeAction>> => {

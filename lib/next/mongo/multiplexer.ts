@@ -1,3 +1,4 @@
+import Multiplexer from '@lib/main/async/multiplexer';
 import { SomeAction } from '@specfocus/main-focus/src/specs/action';
 import { Actor } from '../action/middleware/actor';
 import MongoContext from './context';
@@ -6,14 +7,10 @@ import * as generators from './reactions';
 /**                                                action consumer
  *  | request -> middleware -> broker (split) -> [ queue | iterator ] -> output => middleware -> response |
 */
-class MongoConsumer implements Actor {
-  private readonly reactors: typeof generators;
-
-  public readonly [Symbol.asyncIterator] = (): AsyncIterator<SomeAction> => this;
-
-  constructor() {
+class MongoMultiplexer extends Multiplexer<SomeAction> implements Actor {
+  static create() {
     const context = new MongoContext();
-    this.reactors = Object.entries(generators)
+    const reactors = Object.entries(generators)
       .reduce(
         (acc, [key, fn]) => Object.assign(
           acc,
@@ -21,6 +18,15 @@ class MongoConsumer implements Actor {
         ),
         { ...generators }
       );
+    return new MongoMultiplexer(context, reactors);
+  }
+
+  constructor(
+    public readonly context: MongoContext,
+    public readonly reactors:  typeof generators
+  ) {
+    // TODO use abort controller
+    super([/* TODO add initial iterator to keep it alive */]);
   }
 
   public readonly abort = (reason?: any): void | PromiseLike<void> => {
@@ -33,7 +39,7 @@ class MongoConsumer implements Actor {
       const { [type]: fn } = this.reactors;
       // @ts-ignore
       const asyncIterable = fn(params);
-      // merge that ^
+      this.sources.push(asyncIterable);
     }
   };
 
@@ -53,4 +59,4 @@ class MongoConsumer implements Actor {
   };
 }
 
-export default MongoConsumer;
+export default MongoMultiplexer;

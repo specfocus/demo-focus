@@ -1,6 +1,7 @@
-import { MongoClient, Db } from 'mongodb';
+import { MongoClient } from 'mongodb';
 import assert from 'node:assert';
-import performance from './preformance';
+import performance from '../preformance';
+import MongoCollectionContext from './collection';
 
 const LOCAL_URL = 'mongodb://localhost:27017';
 
@@ -23,9 +24,22 @@ const factory = (() => {
 
 class MongoContext {
   public static readonly create = factory;
+
+  private readonly _collections: Record<string, MongoCollectionContext> = {};
+
   constructor(
     public readonly client: MongoClient
   ) {
+  }
+
+  public readonly collection = (dbName: string, collectionName: string): MongoCollectionContext => {
+    const key = `${dbName}.${collectionName}`;
+    let { [key]: value } = this._collections;
+    if (!value) {
+      value = MongoCollectionContext.create(this.client, dbName, collectionName);
+      Object.assign(this._collections, { [key]: value });
+    }
+    return value;
   }
 
   public readonly performance = (dbName: string) => performance(this.client, dbName);

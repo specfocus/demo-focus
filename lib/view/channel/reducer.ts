@@ -1,8 +1,8 @@
 import { SomeAction } from '@specfocus/main-focus/src/specs/action';
 import { Reducer } from 'react';
 import { useRecoilState } from 'recoil';
-import { atomAlert } from '../../state/alert';
-import { atomStore } from '../../state/store';
+import { atomAlert } from '../notification/alert';
+import { atomStore } from '../collection/source/store';
 /** UI */
 const reducer: Reducer<number, SomeAction> = (version: number, action: SomeAction): any => {
   const [alert, notify] = useRecoilState(atomAlert);

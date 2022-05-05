@@ -1,7 +1,7 @@
 import Multiplexer from '@lib/main/async/multiplexer';
 import { SomeAction } from '@specfocus/main-focus/src/specs/action';
 import { Actor } from '../action/middleware/actor';
-import MongoContext from './context';
+import MongoContext from './context/client';
 import * as generators from './reactions';
 import idle from './idle';
 

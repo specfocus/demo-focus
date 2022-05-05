@@ -1,9 +1,10 @@
 /// <reference lib="dom" />
 import { Dispatch } from 'react';
-import Tokenizer from '@specfocus/json-focus/stream/input/tokenizer';
+import { NO_ROOT_ARRAY, Tokenizer } from '@specfocus/json-focus/async/tokenizer';
 import { SomeAction } from '@specfocus/main-focus/src/specs/action';
-import isAction from '../isAction';
+import isAction from '../../next/action/isAction';
 import { Source } from './source';
+import { type } from 'os';
 
 /** UI */
 export class Channel {
@@ -64,25 +65,22 @@ export class Channel {
     }
     const reader = res.body.getReader();
     try {
-      const tokenizer = new Tokenizer();
+      const tokenizer = new Tokenizer(new Set([NO_ROOT_ARRAY]));
       let result: ReadableStreamDefaultReadResult<Uint8Array>;
       while (!(result = await reader.read()).done) {
         for (const token of tokenizer.tokenize(result.value)) {
-          switch (token.type) {
-            case 'array':
-              break;
-            case 'entry':
-              if (isAction(token.value)) {
-                this.dispatch(token.value);
-              }
-              break;
-            case 'item':
-              if (isAction(token.value)) {
-                this.dispatch(token.value);
-              }
-              break;
-            case 'shape':
-              break;
+          if (token.type === 'error') {
+          } else if (token.path.length > 1) {
+            throw new Error(`this shouldn't happen`);
+          } else if (token.path.length === 1) {
+            if (isAction(token.value)) {
+              this.dispatch(token.value);
+            }
+          } else /* token.path.length === 0 */ {
+            if (token.type === 'array') {
+              throw new Error(`this shouldn't happen`);
+            }
+            throw new Error(`this shouldn't happen`);
           }
         }
       }

@@ -1,7 +1,19 @@
-
 import { MongoClient } from 'mongodb';
 
 interface Metrics {
+  op: any;
+  ns: any;
+  'command.getMore': any;
+  'command.collection': any;
+  'command.batchSize': any;
+  'command.aggregate': any;
+  'command.pipeline': any;
+  //'command.\\$truncated': 'command.truncated',
+  'command.find': any;
+  'command.filter': any;
+  'originatingCommand.aggregate': any;
+  'originatingCommand.pipeline': any;
+  docsExamined: any;
   count: number;
   millis: number;
   avg_millis: number;
@@ -33,8 +45,7 @@ const performace = async (client: MongoClient, dbName: string): Promise<Metrics[
           'originatingCommand.aggregate': true,
           'originatingCommand.pipeline': true,
           'docsExamined': true,
-          'millis': true,
-
+          'millis': true
         }
       },
       {

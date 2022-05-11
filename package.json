@@ -11,8 +11,15 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
+    "@emotion/react": "^11.7.1",
+    "@mui/icons-material": "^5.3.0",
+    "@mui/material": "^5.2.6",
+    "@mui/styles": "^5.3.0",
+    "@specfocus/json-focus": "^0.0.1",
     "@specfocus/main-focus": "^0.0.3",
-    "@specfocus/next-focus": "^0.1.0",
+    "@specfocus/next-focus": "^0.0.1",
+    "@specfocus/react-focus": "^0.2.5",
+    "@specfocus/view-focus": "^0.0.1",
     "mingo": "^6.0.5",
     "mongodb": "^4.5.0",
     "nanoclone": "^1.0.0",

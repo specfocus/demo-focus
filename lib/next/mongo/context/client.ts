@@ -1,5 +1,5 @@
 import { MongoClient } from 'mongodb';
-import assert from 'node:assert';
+import assert from 'assert';
 import performance from '../preformance';
 import MongoCollectionContext from './collection';
 

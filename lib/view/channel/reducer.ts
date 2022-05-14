@@ -1,4 +1,4 @@
-import { SomeAction } from '@specfocus/main-focus/src/specs/action';
+import { SomeAction } from '@specfocus/main-focus/actions';
 import { Reducer } from 'react';
 import { useRecoilState } from 'recoil';
 import { atomAlert } from '../notification/alert';

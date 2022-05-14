@@ -1,8 +1,8 @@
 /// <reference lib="dom" />
 import { Dispatch } from 'react';
 import { NO_ROOT_ARRAY, Tokenizer } from '@specfocus/json-focus/async/tokenizer';
-import { SomeAction } from '@specfocus/main-focus/src/specs/action';
-import isAction from '../../next/action/isAction';
+import { SomeAction } from '@specfocus/main-focus/actions';
+import isAction from '@specfocus/main-focus/actions/isAction';
 import { Source } from './source';
 import { type } from 'os';
 

@@ -1,4 +1,4 @@
-import { SomeAction } from '@specfocus/main-focus/src/specs/action';
+import { SomeAction } from '@specfocus/main-focus/actions';
 
 /** UI */
 export class Source implements UnderlyingSource<Uint8Array> {

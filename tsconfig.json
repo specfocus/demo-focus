@@ -21,6 +21,6 @@
     },
     "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "../main-focus/actions/isAction.ts"],
   "exclude": ["node_modules"]
 }

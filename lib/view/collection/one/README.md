@@ -1,1 +1,0 @@
-Datagrid using state > store > collection
